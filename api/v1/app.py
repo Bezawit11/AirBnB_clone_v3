@@ -15,6 +15,7 @@ def tear_down(self):
     storage.close()
 
 @app.errorhandler(404)
+@app.route('/nop', strict_slashes=False)
 def page_not_found():
     """returns a JSON-formatted 404 status code response"""
     return jsonify({"error": "Not found"}), 404
