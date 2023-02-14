@@ -2,6 +2,7 @@
 """
 a script that starts a Flask web application
 """
+import os
 from api.v1.views import app_views
 from models import storage
 from flask import Flask, Blueprint
@@ -14,4 +15,12 @@ def tear_down(self):
     storage.close()
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=5000)
+    try:
+        host = os.environ.get('HBNB_API_HOST')
+    except:
+        host = '0.0.0.0'
+    try:
+        port = os.environ.get('HBNB_API_PORT')
+    except:
+        port = '5000'
+    app.run(host=host, port=port)
