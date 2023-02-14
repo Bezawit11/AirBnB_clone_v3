@@ -73,8 +73,9 @@ class FileStorage:
         """A method to retrieve one object"""
         for k,v in self.__objects.items():
             if cls == v.__class__ or cls == v.__class__.__name__:
-                if v.__class__.__name__ + "." + id == k:
+                if v.id == id:
                     return v
+        return None
 
     def count(self, cls=None):
         """A method to count the number of objects in storage"""
@@ -83,8 +84,7 @@ class FileStorage:
             for k,v in self.__objects.items():
                 if cls == v.__class__ or cls == v.__class__.__name__:
                     count += 1
-            return count
         else:
             for i in self.__objects:
                 count += 1
-            return count
+        return count
