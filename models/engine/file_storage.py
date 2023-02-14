@@ -69,9 +69,3 @@ class FileStorage:
         """call reload() method for deserializing the JSON file to objects"""
         self.reload()
 
-    def get(self, cls, id):
-        """A method to retrieve one object"""
-        for k,v in self.__objects.items():
-            if cls == v.__class__ or cls == v.__class__.__name__:
-                if v.__class__.__name__ + "." + id == k:
-                    return v
