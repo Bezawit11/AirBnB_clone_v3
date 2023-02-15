@@ -19,7 +19,7 @@ def amenity(place_id):
     p = storage.all("Amenity")
     for i in p:
         if i.place_id == place_id:
-            place_amenity.append(i.to_dict())
+            place_amenity.append(i)
     return jsonify(place_amenity)
 
 @app_views.route('/places/<place_id>/amenities/<amenity_id>', methods=['DELETE'])
