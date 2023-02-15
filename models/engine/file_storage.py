@@ -86,14 +86,8 @@ class FileStorage:
             for v in self.__objects.values():
                 if cls == v.__class__.__name__ or cls == v.__class__:
                     count += 1
-            return count
         else:
-            olist = []
-            for clas in classes:
-                if clas == 'BaseModel':
-                    continue
-                obj_class = FileStorage.__objects
-                for item in obj_class:
-                    olist.append(item)
-            return len(olist)
+            for i in self.__objects.values():
+                count += 1
+        return count
 
