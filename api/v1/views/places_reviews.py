@@ -1,79 +1,88 @@
 #!/usr/bin/python3
-""" View for City objects that handles default API actions """
-from api.v1.views import app_views
-from flask import jsonify, abort, make_response, request
+"""
+View for Reviews that handles all RESTful API actions
+"""
+
+from flask import jsonify, request, abort
 from models import storage
-from models.place import Place 
 from models.review import Review
+from api.v1.views import app_views
 
 
-@app_views.route('/places/<place_id>/reviews', methods=['GET'])
-def reviews(place_id):
-    """ Retrieves the list of all review objects corresponding to id"""
-    place_review = {}
+@app_views.route('/places/<place_id>/reviews', methods=['GET'],
+                 strict_slashes=False)
+def reviews_all(place_id):
+    """ returns list of all Review objects """
     place = storage.get("Place", place_id)
     if place is None:
         abort(404)
-    p = storage.all("Review")
-    for i in p:
-        if i.place_id == place_id:
-            place_review.append(i.to_dict())
-    return jsonify(place_review)
+    reviews_all = []
+    reviews = storage.all("Review").values()
+    for review in reviews:
+        if review.place_id == place_id:
+            reviews_all.append(review.to_json())
+    return jsonify(reviews_all)
 
 
 @app_views.route('/reviews/<review_id>', methods=['GET'])
-def r_review_id(review_id):
-    """ Retrieves a review object """
+def review_get(review_id):
+    """ handles GET method """
     review = storage.get("Review", review_id)
-    if not review:
+    if review is None:
         abort(404)
-    return jsonify(review.to_dict())
+    review = review.to_json()
+    return jsonify(review)
 
 
 @app_views.route('/reviews/<review_id>', methods=['DELETE'])
-def del_review(review_id):
-    """ Deletes a review object """
+def review_delete(review_id):
+    """ handles DELETE method """
+    empty_dict = {}
     review = storage.get("Review", review_id)
-    if not review:
+    if review is None:
         abort(404)
     storage.delete(review)
     storage.save()
-    return jsonify({}), 200
+    return jsonify(empty_dict), 200
 
 
 @app_views.route('/places/<place_id>/reviews', methods=['POST'],
                  strict_slashes=False)
-def post_review(place_id):
-    """ Creates a review object """
+def review_post(place_id):
+    """ handles POST method """
     place = storage.get("Place", place_id)
     if place is None:
         abort(404)
-    new_review = request.get_json()
-    if not new_review:
+    data = request.get_json()
+    if data is None:
         abort(400, "Not a JSON")
-    if "user_id" not in new_review:
+    if 'user_id' not in data:
         abort(400, "Missing user_id")
-    user = storage.get("User", new_review['user_id'])
+    user = storage.get("User", data['user_id'])
     if user is None:
         abort(404)
-    review = Review(**new_review)
+    if 'text' not in data:
+        abort(400, "Missing text")
+    review = Review(**data)
     review.place_id = place_id
-    storage.new(review)
-    storage.save()
-    return jsonify(city.to_dict()), 201
+    review.save()
+    review = review.to_json()
+    return jsonify(review), 201
 
 
 @app_views.route('/reviews/<review_id>', methods=['PUT'])
-def put_review(review_id):
-    """ Updates a review object """
+def review_put(review_id):
+    """ handles PUT method """
     review = storage.get("Review", review_id)
     if review is None:
         abort(404)
-    review_request = request.get_json()
-    if not review_request:
+    data = request.get_json()
+    if data is None:
         abort(400, "Not a JSON")
-    for k, v in review_request.items():
-        if k not in ['id', 'user_id', 'place_id', 'text', 'created_at', 'updated_at']:
-            setattr(review, k, v)
-    storage.save()
-    return jsonify(review.to_dict()), 200
+    for key, value in data.items():
+        ignore_keys = ["id", "user_id", "place_id", "created_at", "updated_at"]
+        if key not in ignore_keys:
+            review.bm_update(key, value)
+    review.save()
+    review = review.to_json()
+    return jsonify(review), 200
