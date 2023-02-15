@@ -86,7 +86,5 @@ class FileStorage:
                     count += 1
         else:
             for i in self.__objects.values():
-                if i.__class__.__name__ == 'BaseModel':
-                    continue
                 count += 1
         return count
