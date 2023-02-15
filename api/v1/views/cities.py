@@ -72,7 +72,7 @@ def put_city(city_id):
         abort(400, "Not a JSON")
 
     for k, v in body_request.items():
-        if k not in ['id', 'state_id', 'created_at', 'updated_at']:
+        if k not in ['id', 'state_id', 'created_at', 'updated_at', 'name']:
             setattr(city, k, v)
 
     storage.save()
