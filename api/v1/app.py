@@ -33,6 +33,7 @@ app.config['SWAGGER'] = {
 
 swagger = Swagger(app)
 
+
 @app.teardown_appcontext
 def teardown_appcontext(exception):
     """ Closes storage session """
@@ -52,4 +53,3 @@ if __name__ == '__main__':
     host = '0.0.0.0' if not HBNB_API_HOST else HBNB_API_HOST
     port = 5000 if not HBNB_API_PORT else HBNB_API_PORT
     app.run(host=host, port=port, threaded=True)
-    
