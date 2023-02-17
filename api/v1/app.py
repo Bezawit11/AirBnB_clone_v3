@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """
-a script that starts a Flask web application
+api for airbnb clone
 """
 
 from os import getenv
@@ -15,13 +15,13 @@ CORS(app, resources={r"/*": {"origins": "0.0.0.0"}})
 
 @app.teardown_appcontext
 def tear_down(self):
-    """remove the current SQLAlchemy Session"""
+    """ remove the current SQLAlchemy Session """
     storage.close()
 
 @app.errorhandler(404)
 @app.route('/api/v1/nop', strict_slashes=False)
 def page_not_found(error):
-    """returns a JSON-formatted 404 status code response"""
+    """ returns a JSON-formatted 404 status code response """
     return jsonify({"error": "Not found"}), 404
 
 if __name__ == '__main__':
