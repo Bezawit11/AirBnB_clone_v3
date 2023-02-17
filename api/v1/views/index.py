@@ -1,7 +1,5 @@
 #!/usr/bin/python3
-"""
-returns json
-"""
+"""returns json"""
 
 from flask import jsonify
 from api.v1.views import app_views
