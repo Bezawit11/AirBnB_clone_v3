@@ -29,7 +29,7 @@ def r_amenity_id(amenity_id):
 @app_views.route('/amenities/<amenity_id>', methods=['DELETE'],
                  strict_slashes=False)
 @swag_from('documentation/amenity/delete_amenity.yml', methods=['DELETE'])
-def del_amenity(amenity_id):
+def dele_amenity(amenity_id):
     """ Deletes a Amenity object """
     amenity = storage.get("Amenity", amenity_id)
     if not amenity:
