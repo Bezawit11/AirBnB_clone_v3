@@ -30,7 +30,7 @@ def del_amenity(amenity_id):
     amenity = storage.get("Amenity", amenity_id)
     if not amenity:
         abort(404)
-    amenity.delete()
+    storage.delete(amenity)
     storage.save()
     return make_response(jsonify({}), 200)
 
