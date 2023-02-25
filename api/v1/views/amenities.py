@@ -41,7 +41,7 @@ def dele_amenity(amenity_id):
 
 @app_views.route('/amenities', methods=['POST'], strict_slashes=False)
 @swag_from('documentation/amenity/post_amenity.yml', methods=['POST'])
-def post_amenity():
+def postt_amenity():
     """ Creates a Amenity object """
     new_amenity = request.get_json()
     if not new_amenity:
@@ -57,7 +57,7 @@ def post_amenity():
 @app_views.route('/amenities/<amenity_id>', methods=['PUT'],
                  strict_slashes=False)
 @swag_from('documentation/amenity/put_amenity.yml', methods=['PUT'])
-def put_amenity(amenity_id):
+def putt_amenity(amenity_id):
     """ Updates a Amenity object """
     amenity = storage.get("Amenity", amenity_id)
     if not amenity:
